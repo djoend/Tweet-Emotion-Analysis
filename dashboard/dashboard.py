@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 # CONFIG PAGE
 st.set_page_config(
@@ -32,7 +33,7 @@ strong {
 # LOAD DATA
 @st.cache_data
 def load_data():
-    return pd.read_csv("dashboard\output_data_final.csv")
+    return pd.read_csv("output_data_final.csv")
 
 data = load_data()
 
