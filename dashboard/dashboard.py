@@ -33,7 +33,12 @@ strong {
 # LOAD DATA
 @st.cache_data
 def load_data():
-    return pd.read_csv("output_data_final.csv")
+    current_dir = os.path.dirname(__file__)
+    file_path = os.path.join(
+        current_dir,
+        "output_data_final.csv"
+    )
+    return pd.read_csv(file_path)
 
 data = load_data()
 
