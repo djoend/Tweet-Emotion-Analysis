@@ -10,6 +10,24 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown("""
+<style>
+
+/* warna item yang dipilih di multiselect */
+span[data-baseweb="tag"] {
+    background-color: #DCEBFF !important;
+    color: black !important;
+    border-radius: 8px !important;
+}
+
+/* tombol close (x) */
+span[data-baseweb="tag"] svg {
+    fill: black !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 # CUSTOM FONT SIZE
 st.markdown("""
 <style>
@@ -119,17 +137,26 @@ elif page == "Dashboard":
     # FILTER EMOSI
     st.sidebar.header("⚙️ Filter Emosi")
 
-    selected_emotion = st.sidebar.selectbox(
+    emotion_options = ["Semua"] + sorted(
+        data["label"].unique()
+    )
+
+    selected_emotion = st.sidebar.multiselect(
         "Pilih Emosi",
-        ["Semua"] + sorted(data["label"].unique())
+        emotion_options,
+        default=["Semua"]
     )
 
     # FILTER DATA
-    if selected_emotion == "Semua":
+    if (
+        "Semua" in selected_emotion
+        or len(selected_emotion) == 0
+    ):
         filtered_data = data.copy()
+
     else:
         filtered_data = data[
-            data["label"] == selected_emotion
+            data["label"].isin(selected_emotion)
         ]
 
     # CENTER LAYOUT
@@ -314,7 +341,7 @@ elif page == "Dashboard":
 
             if rasio < 2:
 
-                st.success(f"""
+                st.info(f"""
                 **Insight:**
 
                 Nilai rasio ketidakseimbangan sebesar
@@ -329,7 +356,7 @@ elif page == "Dashboard":
 
             else:
 
-                st.warning(f"""
+                st.info(f"""
                 **Insight:**
 
                 Nilai rasio ketidakseimbangan sebesar
